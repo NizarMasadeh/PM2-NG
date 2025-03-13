@@ -57,7 +57,7 @@
                     <td>{{ formatUptime(process.uptime) }}</td>
                     <td class="actions-cell">
                         <button *ngIf="process.status !== 'online'" class="action-button start"
-                            (click)="startProcess(process.pm_id)" title="Start">
+                            (click)="startProcess(process.pm_id)" appTooltip tooltipText="Start">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="M5 3l14 9-14 9V3z" />
@@ -65,14 +65,14 @@
                         </button>
 
                         <button *ngIf="process.status === 'online'" class="action-button stop"
-                            (click)="stopProcess(process.pm_id)" title="Stop">
+                            (click)="stopProcess(process.pm_id)" appTooltip tooltipText="Stop">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="M6 4h12v16H6z" />
                             </svg>
                         </button>
 
-                        <button class="action-button restart" (click)="restartProcess(process.pm_id)" title="Restart">
+                        <button class="action-button restart" (click)="restartProcess(process.pm_id)" appTooltip tooltipText="Restart">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2"
@@ -80,7 +80,7 @@
                             </svg>
                         </button>
 
-                        <button class="action-button reload" (click)="reloadProcess(process.pm_id)" title="Reload">
+                        <button class="action-button reload" (click)="reloadProcess(process.pm_id)" appTooltip tooltipText="Reload">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2"
@@ -88,7 +88,7 @@
                             </svg>
                         </button>
 
-                        <button class="action-button logs" (click)="viewLogs(process.pm_id)" title="View Logs">
+                        <button class="action-button logs" (click)="viewLogs(process.pm_id)" appTooltip tooltipText="View logs">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2"

@@ -2,6 +2,8 @@
     <app-navbar [username]="username" (logout)="logout()"></app-navbar>
 
     <div class="dashboard-content">
-        <router-outlet></router-outlet>
+        <main [@routeAnimations]="prepareRoute(outlet)">
+            <router-outlet #outlet="outlet"></router-outlet>
+        </main>
     </div>
 </div>

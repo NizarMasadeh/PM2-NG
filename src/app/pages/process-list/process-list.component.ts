@@ -4,11 +4,13 @@ import { Subscription, interval, switchMap } from 'rxjs';
 import { Pm2Process } from '../../models/pm2-process.model';
 import { Pm2Service } from '../../services/pm2.service';
 import { CommonModule } from '@angular/common';
+import { TooltipDirective } from '../../directives/tooltip.directive';
 
 @Component({
   selector: 'app-process-list',
   imports: [
-    CommonModule
+    CommonModule,
+    TooltipDirective
   ],
   templateUrl: './process-list.component.html',
   styleUrl: './process-list.component.scss'

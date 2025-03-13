@@ -7,17 +7,34 @@ import { ProcessDetailsComponent } from './pages/process-details/process-details
 import { ProcessListComponent } from './pages/process-list/process-list.component';
 
 export const routes: Routes = [
-    { path: "login", component: LoginComponent },
-    {
-        path: "",
-        component: DashboardComponent,
-        canActivate: [AuthGuard],
-        children: [
-            { path: "", redirectTo: "processes", pathMatch: "full" },
-            { path: "processes", component: ProcessListComponent },
-            { path: "processes/:id", component: ProcessDetailsComponent },
-            { path: "logs/:id", component: LogViewerComponent },
-        ],
-    },
-    { path: "**", redirectTo: "" },
+  { 
+    path: 'login', 
+    component: LoginComponent,
+    data: { animation: 'LoginPage' },
+  },
+  {
+    path: '',
+    component: DashboardComponent,
+    data: { animation: 'DashboardPage' },
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', redirectTo: 'processes', pathMatch: 'full' },
+      { 
+        path: 'processes', 
+        component: ProcessListComponent,
+        data: { animation: 'ProcessesPage' },
+      },
+      { 
+        path: 'processes/:id', 
+        component: ProcessDetailsComponent,
+        data: { animation: 'ProcessesPageId' },
+      },
+      { 
+        path: 'logs/:id', 
+        component: LogViewerComponent,
+        data: { animation: 'LogsPageId' },
+      },
+    ],
+  },
+  { path: '**', redirectTo: '' },
 ];

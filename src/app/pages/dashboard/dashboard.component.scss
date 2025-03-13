@@ -1,12 +1,30 @@
+@use 'variables' as *;
+
 .dashboard-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    background-color: #f5f7fa;
+    min-height: 100vh;
+    background-color: $gray-100;
+    transition: $transition-base;
 }
 
 .dashboard-content {
     flex: 1;
-    padding: 20px;
+    padding: $spacing-5;
     overflow-y: auto;
+    animation: fadeIn 0.3s ease-in-out;
+
+    @media (max-width: 768px) {
+        padding: $spacing-4;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
