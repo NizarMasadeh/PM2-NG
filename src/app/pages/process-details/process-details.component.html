@@ -1,0 +1,175 @@
+<div class="process-details-container">
+    <div class="header">
+        <button class="back-button" (click)="goBack()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 12H5m7 7l-7-7 7-7" />
+            </svg>
+            <span>Back to Process List</span>
+        </button>
+
+        <button class="refresh-button" (click)="loadProcessDetails()" [disabled]="loading">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h5M4 9l6-6M20 4v5h-5m5 0l-6-6M4 20v-5h5m-5 0l6 6m10 0v-5h-5m5 0l-6 6" />
+            </svg>
+            <span>Refresh</span>
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading process details...</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error && !process" class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 0v8m0 0l4-4m-4 4l-4-4" />
+        </svg>
+        <h3>Process not found</h3>
+        <p>The requested process could not be found.</p>
+    </div>
+
+    <div *ngIf="!loading && !error && process" class="process-content">
+        <div class="process-header">
+            <h1>{{ process.name }}</h1>
+            <div class="process-actions">
+                <button *ngIf="process.status !== 'online'" class="action-button start" (click)="startProcess()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M5 3l14 9-14 9V3z" />
+                    </svg>
+                    <span>Start</span>
+                </button>
+
+                <button *ngIf="process.status === 'online'" class="action-button stop" (click)="stopProcess()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M6 4h12v16H6z" />
+                    </svg>
+                    <span>Stop</span>
+                </button>
+
+                <button class="action-button restart" (click)="restartProcess()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6m12-4a9 9 0 0 1-15 6.7L3 16" />
+                    </svg>
+                    <span>Restart</span>
+                </button>
+
+                <button class="action-button reload" (click)="reloadProcess()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 4v5h5M4 9l6-6M20 4v5h-5m5 0l-6-6M4 20v-5h5m-5 0l6 6m10 0v-5h-5m5 0l-6 6" />
+                    </svg>
+                    <span>Reload</span>
+                </button>
+
+                <button class="action-button logs" (click)="viewLogs()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M14 3v4a1 1 0 0 0 1 1h4M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2zM9 9h1M9 13h6M9 17h6" />
+                    </svg>
+                    <span>View Logs</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <span class="status-badge" [ngClass]="getStatusClass(process.status)">
+                {{ process.status }}
+            </span>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <div class="detail-label">Process ID</div>
+                <div class="detail-value">{{ process.pm_id }}</div>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-label">PID</div>
+                <div class="detail-value">{{ process.pid || 'N/A' }}</div>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-label">CPU</div>
+                <div class="detail-value">{{ process.cpu }}%</div>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-label">Memory</div>
+                <div class="detail-value">{{ formatMemory(process.memory) }}</div>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-label">Uptime</div>
+                <div class="detail-value">{{ formatUptime(process.uptime) }}</div>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-label">Restarts</div>
+                <div class="detail-value">{{ process.restart_count || 0 }}</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Environment</h2>
+            <div class="env-container">
+                <div *ngFor="let item of process.env | keyvalue" class="env-item">
+                    <div class="env-key">{{ item.key }}</div>
+                    <div class="env-value">{{ item.value }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Script</h2>
+            <div class="script-info">
+                <div class="script-item">
+                    <div class="script-label">Script Path</div>
+                    <div class="script-value">{{ process.script_path || 'N/A' }}</div>
+                </div>
+
+                <div class="script-item">
+                    <div class="script-label">Working Directory</div>
+                    <div class="script-value">{{ process.cwd || 'N/A' }}</div>
+                </div>
+
+                <div class="script-item">
+                    <div class="script-label">Interpreter</div>
+                    <div class="script-value">{{ process.exec_interpreter || 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Timestamps</h2>
+            <div class="timestamps-grid">
+                <div class="timestamp-card">
+                    <div class="timestamp-label">Created</div>
+                    <div class="timestamp-value">{{ formatDate(process.created_at) }}</div>
+                </div>
+
+                <div class="timestamp-card">
+                    <div class="timestamp-label">Updated</div>
+                    <div class="timestamp-value">{{ formatDate(process.updated_at) }}</div>
+                </div>
+
+                <div *ngIf="process.status === 'online'" class="timestamp-card">
+                    <div class="timestamp-label">Started</div>
+                    <div class="timestamp-value">{{ formatDate(process.started_at) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

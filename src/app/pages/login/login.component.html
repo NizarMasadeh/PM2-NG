@@ -1,0 +1,97 @@
+<div class="login-container">
+    <div class="login-card">
+        <div class="logo">
+            <h1>PM2 Monitor</h1>
+            <div class="logo-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 0v8m0 0l4-4m-4 4l-4-4" />
+                </svg>
+            </div>
+        </div>
+
+        <div *ngIf="!isRegistered && !isRegistering" class="first-time-message">
+            <p>Welcome to PM2 Monitor! Please register to continue.</p>
+            <button (click)="toggleRegister()" class="btn btn-primary">Register Now</button>
+        </div>
+
+        <form *ngIf="isRegistered && !isRegistering" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+            <h2>Login</h2>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" formControlName="username" class="form-control"
+                    [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+                    class="error-message">
+                    Username is required
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" formControlName="password" class="form-control"
+                    [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                    class="error-message">
+                    Password is required
+                </div>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || loading">
+                <span *ngIf="loading" class="spinner"></span>
+                Login
+            </button>
+        </form>
+
+        <form *ngIf="!isRegistered || isRegistering" [formGroup]="registerForm" (ngSubmit)="onRegister()"
+            class="register-form">
+            <h2>Register</h2>
+
+            <div class="form-group">
+                <label for="reg-username">Username</label>
+                <input type="text" id="reg-username" formControlName="username" class="form-control"
+                    [class.is-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+                <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+                    class="error-message">
+                    Username is required
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" formControlName="password" class="form-control"
+                    [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                    class="error-message">
+                    Password must be at least 6 characters
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" formControlName="confirmPassword" class="form-control"
+                    [class.is-invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+                <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+                    class="error-message">
+                    Please confirm your password
+                </div>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid || loading">
+                <span *ngIf="loading" class="spinner"></span>
+                Register
+            </button>
+
+            <div *ngIf="isRegistered" class="toggle-form">
+                <button type="button" (click)="toggleRegister()" class="btn btn-link">
+                    Back to Login
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

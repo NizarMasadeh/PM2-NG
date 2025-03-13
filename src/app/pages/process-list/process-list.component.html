@@ -1,0 +1,103 @@
+<div class="process-list-container">
+    <div class="header">
+        <h1>Process List</h1>
+        <button class="refresh-button" (click)="loadProcesses()" [disabled]="loading">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h5M4 9l6-6M20 4v5h-5m5 0l-6-6M4 20v-5h5m-5 0l6 6m10 0v-5h-5m5 0l-6 6" />
+            </svg>
+            <span>Refresh</span>
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading processes...</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error && processes.length === 0" class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 0v8m0 0l4-4m-4 4l-4-4" />
+        </svg>
+        <h3>No processes found</h3>
+        <p>There are no PM2 processes running at the moment.</p>
+    </div>
+
+    <div *ngIf="!loading && !error && processes.length > 0" class="process-table-container">
+        <table class="process-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>CPU</th>
+                    <th>Memory</th>
+                    <th>Uptime</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let process of processes">
+                    <td class="name-cell">
+                        <div class="process-name" (click)="viewDetails(process.pm_id)">{{ process.name }}</div>
+                    </td>
+                    <td>{{ process.pm_id }}</td>
+                    <td>
+                        <span class="status-badge" [ngClass]="getStatusClass(process.status)">
+                            {{ process.status }}
+                        </span>
+                    </td>
+                    <td>{{ process.cpu }}%</td>
+                    <td>{{ formatMemory(process.memory) }}</td>
+                    <td>{{ formatUptime(process.uptime) }}</td>
+                    <td class="actions-cell">
+                        <button *ngIf="process.status !== 'online'" class="action-button start"
+                            (click)="startProcess(process.pm_id)" title="Start">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M5 3l14 9-14 9V3z" />
+                            </svg>
+                        </button>
+
+                        <button *ngIf="process.status === 'online'" class="action-button stop"
+                            (click)="stopProcess(process.pm_id)" title="Stop">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M6 4h12v16H6z" />
+                            </svg>
+                        </button>
+
+                        <button class="action-button restart" (click)="restartProcess(process.pm_id)" title="Restart">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6m12-4a9 9 0 0 1-15 6.7L3 16" />
+                            </svg>
+                        </button>
+
+                        <button class="action-button reload" (click)="reloadProcess(process.pm_id)" title="Reload">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4 4v5h5M4 9l6-6M20 4v5h-5m5 0l-6-6M4 20v-5h5m-5 0l6 6m10 0v-5h-5m5 0l-6 6" />
+                            </svg>
+                        </button>
+
+                        <button class="action-button logs" (click)="viewLogs(process.pm_id)" title="View Logs">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M14 3v4a1 1 0 0 0 1 1h4M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2zM9 9h1M9 13h6M9 17h6" />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

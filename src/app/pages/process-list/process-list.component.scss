@@ -1,0 +1,243 @@
+.process-list-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+}
+
+.refresh-button {
+    display: flex;
+    align-items: center;
+    background-color: #f5f7fa;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    svg {
+        margin-right: 8px;
+    }
+
+    &:hover {
+        background-color: #e9ecef;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(30, 60, 114, 0.2);
+        border-radius: 50%;
+        border-top-color: #1e3c72;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 15px;
+    }
+
+    p {
+        color: #666;
+        font-size: 16px;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+    color: #666;
+
+    svg {
+        color: #aaa;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}
+
+.process-table-container {
+    overflow-x: auto;
+}
+
+.process-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        font-weight: 600;
+        color: #333;
+        background-color: #f9fafb;
+    }
+
+    tr:hover {
+        background-color: #f5f7fa;
+    }
+
+    .name-cell {
+        max-width: 200px;
+    }
+
+    .process-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        color: #1e3c72;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: capitalize;
+
+        &.status-online {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        &.status-stopped {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        &.status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        &.status-launching {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        &.status-unknown {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+    }
+
+    .actions-cell {
+        white-space: nowrap;
+    }
+
+    .action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 4px;
+        background-color: transparent;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: #e9ecef;
+        }
+
+        &.start {
+            color: #28a745;
+        }
+
+        &.stop {
+            color: #dc3545;
+        }
+
+        &.restart {
+            color: #fd7e14;
+        }
+
+        &.reload {
+            color: #17a2b8;
+        }
+
+        &.logs {
+            color: #6c757d;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .process-table {
+
+        th,
+        td {
+            padding: 10px;
+        }
+
+        th:nth-child(4),
+        th:nth-child(5),
+        th:nth-child(6),
+        td:nth-child(4),
+        td:nth-child(5),
+        td:nth-child(6) {
+            display: none;
+        }
+    }
+}

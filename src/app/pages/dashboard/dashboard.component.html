@@ -1,0 +1,7 @@
+<div class="dashboard-container">
+    <app-navbar [username]="username" (logout)="logout()"></app-navbar>
+
+    <div class="dashboard-content">
+        <router-outlet></router-outlet>
+    </div>
+</div>
