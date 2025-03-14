@@ -7,11 +7,12 @@
     "dev:server": "nodemon backend/server.js",
     "dev:client": "ng serve",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "build": "cd frontend && ng build",
+    "build": "ng build",
     "postinstall": "npm run build"
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^19.2.2",
     "@angular/common": "^19.2.0",
     "@angular/compiler": "^19.2.0",
     "@angular/core": "^19.2.0",
