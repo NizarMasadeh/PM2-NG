@@ -1,59 +1,59 @@
-# Pm2Ng
+# PM2 Monitor
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.0.
+A modern web-based monitoring dashboard for PM2 process manager with dark/light theme support.
 
-## Development server
+![Login Screen](./screenshots/login.png)
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
-```
+- **Process Monitoring**: Real-time monitoring of all PM2 processes
+- **Process Management**: Start, stop, restart, and reload processes
+- **Detailed Process Information**: View CPU usage, memory consumption, uptime, and more
+- **Environment Variables**: Inspect environment variables for each process
+- **Log Viewing**: Access standard and error logs with auto-refresh capability
+- **Authentication**: Secure login system to protect your process management
+- **Theme Toggle**: Switch between dark and light modes for comfortable viewing
+- **Responsive Design**: Works on desktop and mobile devices
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Screenshots
 
-## Code scaffolding
+### Authentication
+![Login Screen](./screenshots/login.png)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Process List
+![Process List](./screenshots/process-list.png)
 
-```bash
-ng generate component component-name
-```
+### Process Details
+![Process Details](./screenshots/process-details.png)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Log Viewer
+![Log Viewer](./screenshots/log-viewer.png)
 
-```bash
-ng generate --help
-```
+### Dark Theme
+![Dark Theme](./screenshots/process-list-dark.png)
 
-## Building
+## Installation
 
-To build the project run:
+### Prerequisites
 
-```bash
-ng build
-```
+- Node.js (v18 or higher)
+- PM2 installed globally (`npm install pm2 -g`)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Setup
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/NizarMasadeh/pm2-ng.git
+   cd pm2-ng
+   ```
+2. Install dependencies:
+   ```bash
+   npm i
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Access the application:
+   - Frontend: `localhost:4141`
+   - Backend: Runs automatically on port `3000`
