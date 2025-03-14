@@ -41,8 +41,8 @@ A modern web-based monitoring dashboard for PM2 process manager with dark/light 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/NizarMasadeh/pm2-ng.git
-   cd pm2-ng
+   git clone https://github.com/NizarMasadeh/PM2-NG.git
+   cd PM2-NG
    ```
 2. Install frontend dependencies:
    ```bash
