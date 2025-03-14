@@ -3,11 +3,15 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node backend/server.js",
-    "dev:server": "nodemon backend/server.js",
+    "start": "node dist/backend/main.js",
+    "start:dev": "cd backend && nest start --watch",
+    "start:debug": "cd backend && nest start --debug --watch",
+    "start:prod": "node dist/backend/main.js",
+    "build:backend": "cd backend && nest build",
+    "dev:server": "cd backend && nest start --watch",
     "dev:client": "ng serve",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "build": "ng build",
+    "build": "ng build && npm run build:backend",
     "postinstall": "npm run build"
   },
   "private": true,
