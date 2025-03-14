@@ -4,7 +4,6 @@ A modern web-based monitoring dashboard for PM2 process manager with dark/light 
 
 <p align="center">
   <img src="https://angular.io/assets/images/logos/angular/angular.svg" alt="Angular" width="50" height="50"/>
-  <img src="https://rxjs.dev/generated/images/marketing/home/Rx_Logo-512-512.png" alt="RxJS" width="50" height="50"/>
   <img src="https://nestjs.com/img/logo-small.svg" alt="NestJS" width="50" height="50"/>
 </p>
 
