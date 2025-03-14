@@ -2,8 +2,6 @@
 
 A modern web-based monitoring dashboard for PM2 process manager with dark/light theme support.
 
-![Login Screen](./screenshots/login.png)
-
 ## Features
 
 - **Process Monitoring**: Real-time monitoring of all PM2 processes
