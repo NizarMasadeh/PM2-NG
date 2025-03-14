@@ -52,12 +52,22 @@ A modern web-based monitoring dashboard for PM2 process manager with dark/light 
    ```bash
    cd backend
    npm i
+   ```
+4. Create an `.env` file in the `backend` directory:
+   ```bash
+   cp .env.example .env
+   ```
+   - Open `.env` and update the JWT_SECRET as needed.
+
+5. Navigate back to the root directory:
+   ```bash
    cd ..
    ```
-4. Start the development server:
+6. Start the development server:
    ```bash
    npm run dev
    ```
-5. Access the application:
+7. Access the application:
    - Frontend: `localhost:4141`
    - Backend: Runs automatically on port `3000`
+
