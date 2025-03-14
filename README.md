@@ -2,6 +2,12 @@
 
 A modern web-based monitoring dashboard for PM2 process manager with dark/light theme support.
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" />
+  <img src="https://img.shields.io/badge/RxJS-B7178C?style=for-the-badge&logo=reactivex&logoColor=white" />
+  <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" />
+</p>
+
 ## Features
 
 - **Process Monitoring**: Real-time monitoring of all PM2 processes
