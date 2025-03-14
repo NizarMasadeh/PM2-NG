@@ -2,6 +2,8 @@
 
 A modern web-based monitoring dashboard for PM2 process manager with dark/light theme support.
 
+![Login Screen](./screenshots/login.png)
+
 ## Features
 
 - **Process Monitoring**: Real-time monitoring of all PM2 processes
@@ -44,14 +46,20 @@ A modern web-based monitoring dashboard for PM2 process manager with dark/light 
    git clone https://github.com/NizarMasadeh/pm2-ng.git
    cd pm2-ng
    ```
-2. Install dependencies:
+2. Install frontend dependencies:
    ```bash
    npm i
    ```
-3. Start the development server:
+3. Install backend dependencies:
+   ```bash
+   cd backend
+   npm i
+   cd ..
+   ```
+4. Start the development server:
    ```bash
    npm run dev
    ```
-4. Access the application:
+5. Access the application:
    - Frontend: `localhost:4141`
    - Backend: Runs automatically on port `3000`
