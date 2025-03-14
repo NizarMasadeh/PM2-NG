@@ -1,47 +1,48 @@
-import { Injectable } from "@angular/core"
-import { HttpClient } from "@angular/common/http"
-import { Observable } from "rxjs"
-import { environment } from "../../environments/environment"
-import { Pm2Process } from "../models/pm2-process.model"
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Pm2Process } from '../models/pm2-process.model';
 
 @Injectable({
-    providedIn: "root",
+  providedIn: 'root',
 })
 export class Pm2Service {
-    private apiUrl = environment.apiUrl
+  private apiUrl = environment.apiUrl;
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-    getProcesses(): Observable<Pm2Process[]> {
-        return this.http.get<Pm2Process[]>(`${this.apiUrl}/pm2/processes`)
-    }
+  getProcesses(): Observable<Pm2Process[]> {
+    return this.http.get<Pm2Process[]>(`${this.apiUrl}/pm2/processes`);
+  }
 
-    getProcessById(id: string): Observable<Pm2Process> {
-        return this.http.get<Pm2Process>(`${this.apiUrl}/pm2/processes/${id}`)
-    }
+  getProcessById(id: string): Observable<any> {
+    console.log('Triggered process in service');
 
-    startProcess(id: string): Observable<{ success: boolean }> {
-        return this.http.post<{ success: boolean }>(`${this.apiUrl}/pm2/processes/${id}/start`, {})
-    }
+    return this.http.get(`${this.apiUrl}/pm2/processes/${id}`);
+  }
 
-    stopProcess(id: string): Observable<{ success: boolean }> {
-        return this.http.post<{ success: boolean }>(`${this.apiUrl}/pm2/processes/${id}/stop`, {})
-    }
+  startProcess(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/pm2/processes/${id}/start`, {});
+  }
 
-    restartProcess(id: string): Observable<{ success: boolean }> {
-        return this.http.post<{ success: boolean }>(`${this.apiUrl}/pm2/processes/${id}/restart`, {})
-    }
+  stopProcess(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/pm2/processes/${id}/stop`, {});
+  }
 
-    reloadProcess(id: string): Observable<{ success: boolean }> {
-        return this.http.post<{ success: boolean }>(`${this.apiUrl}/pm2/processes/${id}/reload`, {})
-    }
+  restartProcess(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/pm2/processes/${id}/restart`, {});
+  }
 
-    getLogs(id: string, type: "out" | "error"): Observable<string[]> {
-        return this.http.get<string[]>(`${this.apiUrl}/pm2/processes/${id}/logs/${type}`)
-    }
+  reloadProcess(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/pm2/processes/${id}/reload`, {});
+  }
 
-    clearLogs(id: string): Observable<{ success: boolean }> {
-        return this.http.delete<{ success: boolean }>(`${this.apiUrl}/pm2/processes/${id}/logs`)
-    }
+  getLogs(id: string, type: 'out' | 'error'): Observable<any> {
+    return this.http.get(`${this.apiUrl}/pm2/processes/${id}/logs/${type}`);
+  }
+
+  clearLogs(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/pm2/processes/${id}/logs`);
+  }
 }
-

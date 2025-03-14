@@ -7,8 +7,8 @@ import { ProcessDetailsComponent } from './pages/process-details/process-details
 import { ProcessListComponent } from './pages/process-list/process-list.component';
 
 export const routes: Routes = [
-  { 
-    path: 'login', 
+  {
+    path: 'login',
     component: LoginComponent,
     data: { animation: 'LoginPage' },
   },
@@ -19,18 +19,18 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'processes', pathMatch: 'full' },
-      { 
-        path: 'processes', 
+      {
+        path: 'processes',
         component: ProcessListComponent,
         data: { animation: 'ProcessesPage' },
       },
-      { 
-        path: 'processes/:id', 
+      {
+        path: 'processes/:id',
         component: ProcessDetailsComponent,
         data: { animation: 'ProcessesPageId' },
       },
-      { 
-        path: 'logs/:id', 
+      {
+        path: 'logs/:id',
         component: LogViewerComponent,
         data: { animation: 'LogsPageId' },
       },

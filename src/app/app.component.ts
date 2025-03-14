@@ -7,10 +7,9 @@ import { routeAnimations } from './animations/route.animation';
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  animations: [routeAnimations]
+  animations: [routeAnimations],
 })
 export class AppComponent {
-
   prepareRoute(outlet: RouterOutlet) {
     return outlet?.activatedRouteData?.['animation'] ?? '';
   }

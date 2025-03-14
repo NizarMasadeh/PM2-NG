@@ -7,126 +7,178 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-log-viewer',
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   templateUrl: './log-viewer.component.html',
-  styleUrl: './log-viewer.component.scss'
+  styleUrl: './log-viewer.component.scss',
 })
 export class LogViewerComponent implements OnInit, OnDestroy {
-
-  process?: Pm2Process
-  logs: string[] = []
-  loading = true
-  error = ""
-  processId = ""
-  autoRefresh = true
-  refreshInterval = 5000 // 5 seconds
-  logType: "out" | "error" = "out"
-  private refreshSubscription?: Subscription
+  process?: Pm2Process;
+  logs: string[] = [];
+  loading = true;
+  error = '';
+  processId = '';
+  autoRefresh = true;
+  refreshInterval = 500;
+  logType: 'out' | 'error' = 'out';
+  private refreshSubscription?: Subscription;
 
   constructor(
     private pm2Service: Pm2Service,
     private route: ActivatedRoute,
-    private router: Router,
-  ) { }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.processId = params["id"]
-      this.loadProcessDetails()
-      this.loadLogs()
+    this.clearAutoRefresh();
 
-      if (this.autoRefresh) {
-        this.setupAutoRefresh()
-      }
-    })
+    this.route.params.subscribe(async (params) => {
+      this.processId = await params['id'];
+      this.logs = [];
+      this.loading = true;
+      this.error = '';
+
+      this.loadLogs();
+      // this.loadLogsWithRetry(3);
+      // this.loadProcessDetails();
+    });
   }
 
   ngOnDestroy(): void {
-    this.clearAutoRefresh()
+    this.clearAutoRefresh();
+    this.processId = '';
+  }
+
+  loadLogsWithRetry(retries: number): void {
+    this.loading = true;
+    this.error = '';
+
+    this.pm2Service.getLogs(this.processId, this.logType).subscribe({
+      next: (logs) => {
+        console.log('Logs triggerd');
+
+        this.logs = logs;
+        this.loading = false;
+
+        if (this.autoRefresh) {
+          setTimeout(() => this.setupAutoRefresh(), 1000);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading logs:', error);
+
+        if (retries > 0) {
+          this.error = `Loading logs, retrying... (${retries} attempts left)`;
+          setTimeout(() => {
+            this.loadLogsWithRetry(retries - 1);
+          }, 2000);
+        } else {
+          this.error = 'Failed to load logs. Please try refreshing the page.';
+          this.loading = false;
+        }
+      },
+    });
   }
 
   loadProcessDetails(): void {
-    this.pm2Service.getProcessById(this.processId).subscribe(
-      (process) => {
-        this.process = process
+    console.log('Load proccess triggered');
+
+    this.pm2Service.getProcessById(this.processId).subscribe({
+      next: async (process) => {
+        this.process = await process;
       },
-      (error) => {
-        console.error("Error loading process details:", error)
+      error: (error) => {
+        console.error('Error loading process details:', error);
       },
-    )
+    });
   }
 
   loadLogs(): void {
-    this.loading = true
-    this.error = ""
+    this.loading = true;
+    this.error = '';
 
-    this.pm2Service.getLogs(this.processId, this.logType).subscribe(
-      (logs) => {
-        this.logs = logs
-        this.loading = false
+    this.clearAutoRefresh();
+
+    this.pm2Service.getLogs(this.processId, this.logType).subscribe({
+      next: (logs) => {
+        console.log('Load logs triggered');
+
+        this.logs = logs;
+        this.loading = false;
+
+        this.pm2Service.getProcessById(this.processId).subscribe({
+          next: async (process) => {
+            this.process = await process;
+          },
+          error: (error) => {
+            console.error('Error loading process details:', error);
+          },
+        });
       },
-      (error) => {
-        this.error = "Failed to load logs. Please try again."
-        this.loading = false
-        console.error("Error loading logs:", error)
+      error: (error) => {
+        this.error = 'Failed to load logs. Please try again.';
+        this.loading = false;
+        console.error('Error loading logs:', error);
       },
-    )
+    });
   }
 
-  toggleLogType(type: "out" | "error"): void {
+  toggleLogType(type: 'out' | 'error'): void {
     if (this.logType !== type) {
-      this.logType = type
-      this.loadLogs()
+      this.logType = type;
+
+      this.clearAutoRefresh();
+
+      this.loadLogsWithRetry(3);
     }
   }
 
   toggleAutoRefresh(): void {
-    this.autoRefresh = !this.autoRefresh
+    this.autoRefresh = !this.autoRefresh;
 
     if (this.autoRefresh) {
-      this.setupAutoRefresh()
+      this.setupAutoRefresh();
     } else {
-      this.clearAutoRefresh()
+      this.clearAutoRefresh();
     }
   }
 
   setupAutoRefresh(): void {
-    this.clearAutoRefresh()
+    this.clearAutoRefresh();
 
-    this.refreshSubscription = interval(this.refreshInterval)
-      .pipe(switchMap(() => this.pm2Service.getLogs(this.processId, this.logType)))
-      .subscribe(
-        (logs) => {
-          this.logs = logs
-        },
-        (error) => {
-          console.error("Error refreshing logs:", error)
-        },
-      )
+    this.refreshSubscription = interval(this.refreshInterval).subscribe(() => {
+      if (!this.loading) {
+        this.pm2Service.getLogs(this.processId, this.logType).subscribe({
+          next: (logs) => {
+            this.logs = logs;
+            this.error = '';
+          },
+          error: (error) => {
+            console.error('Error during auto-refresh:', error);
+          },
+        });
+      }
+    });
   }
 
   clearAutoRefresh(): void {
     if (this.refreshSubscription) {
-      this.refreshSubscription.unsubscribe()
-      this.refreshSubscription = undefined
+      this.refreshSubscription.unsubscribe();
+      this.refreshSubscription = undefined;
     }
   }
 
   clearLogs(): void {
-    this.pm2Service.clearLogs(this.processId).subscribe(
-      () => {
-        this.logs = []
+    this.pm2Service.clearLogs(this.processId).subscribe({
+      next: () => {
+        this.logs = [];
       },
-      (error) => {
-        console.error("Error clearing logs:", error)
+      error: (error) => {
+        console.error('Error clearing logs:', error);
       },
-    )
+    });
   }
 
   goBack(): void {
-    this.router.navigate(["/processes", this.processId])
+    this.router.navigate(['/processes', this.processId]);
   }
 }
-
