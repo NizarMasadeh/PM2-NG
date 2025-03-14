@@ -1,8 +1,8 @@
-<nav class="navbar">
+<nav class="navbar" [class.navbar-dark]="isDarkMode">
     <div class="navbar-container">
         <div class="navbar-brand">
             <a routerLink="/">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="navbar-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" class="navbar-logo">
                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                         stroke-width="2" d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 0v8m0 0l4-4m-4 4l-4-4" />
                 </svg>
@@ -10,26 +10,53 @@
             </a>
         </div>
 
-        <button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-
-        <div class="navbar-menu" [class.is-active]="isMobileMenuOpen">
+        <div class="navbar-menu-desktop">
             <div class="navbar-start">
-                <a routerLink="/processes" routerLinkActive="active" class="navbar-item">Processes</a>
+                <a routerLink="/processes" routerLinkActive="active" class="navbar-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" class="icon">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
+                    <span>Processes</span>
+                </a>
             </div>
 
             <div class="navbar-end">
-                <div class="navbar-item has-dropdown">
-                    <a class="navbar-link">
+                <div class="theme-toggle-wrapper">
+                    <label for="themeToggle" class="themeToggle st-sunMoonThemeToggleBtn">
+                        <input type="checkbox" id="themeToggle" class="themeToggleInput" [(ngModel)]="isDarkMode"
+                            (change)="toggleLightDark()" />
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" stroke="none">
+                            <g>
+                                <circle class="sunRay sunRay1" cx="18" cy="10" r="1.5"></circle>
+                                <circle class="sunRay sunRay2" cx="14" cy="16.928" r="1.5"></circle>
+                                <circle class="sunRay sunRay3" cx="6" cy="16.928" r="1.5"></circle>
+                                <circle class="sunRay sunRay4" cx="2" cy="10" r="1.5"></circle>
+                                <circle class="sunRay sunRay5" cx="6" cy="3.1718" r="1.5"></circle>
+                                <circle class="sunRay sunRay6" cx="14" cy="3.1718" r="1.5"></circle>
+                            </g>
+                            <circle class="sunMoon" cx="10" cy="10" r="8" mask="url(#moon-mask)"></circle>
+                            <mask id="moon-mask">
+                                <rect x="0" y="0" width="20" height="20" fill="white"></rect>
+                                <circle cx="11" cy="3" r="8" fill="black"></circle>
+                            </mask>
+                        </svg>
+                    </label>
+                </div>
+
+                <div class="navbar-item has-dropdown" (clickOutside)="closeUserDropdown()"
+                    [exclude]="'.user-dropdown-toggle'">
+                    <a class="navbar-link user-dropdown-toggle" (click)="toggleUserDropdown($event)">
                         <span class="user-avatar">{{ username.charAt(0).toUpperCase() }}</span>
                         <span class="username">{{ username }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+                            class="dropdown-arrow" [class.open]="isUserDropdownOpen">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="M6 9l6 6 6-6" />
+                        </svg>
                     </a>
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item" (click)="onLogout()">
+                    <div class="navbar-dropdown" [class.is-active]="isUserDropdownOpen">
+                        <a class="navbar-item dropdown-item" (click)="onLogout()">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
                                 class="icon">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -40,6 +67,72 @@
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="mobile-controls">
+            <div class="theme-toggle-wrapper mobile-theme-toggle">
+                <label for="mobileThemeToggle" class="themeToggle st-sunMoonThemeToggleBtn">
+                    <input type="checkbox" id="mobileThemeToggle" class="themeToggleInput" [(ngModel)]="isDarkMode"
+                        (change)="toggleLightDark()" />
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" stroke="none">
+                        <g>
+                            <circle class="sunRay sunRay1" cx="18" cy="10" r="1.5"></circle>
+                            <circle class="sunRay sunRay2" cx="14" cy="16.928" r="1.5"></circle>
+                            <circle class="sunRay sunRay3" cx="6" cy="16.928" r="1.5"></circle>
+                            <circle class="sunRay sunRay4" cx="2" cy="10" r="1.5"></circle>
+                            <circle class="sunRay sunRay5" cx="6" cy="3.1718" r="1.5"></circle>
+                            <circle class="sunRay sunRay6" cx="14" cy="3.1718" r="1.5"></circle>
+                        </g>
+                        <circle class="sunMoon" cx="10" cy="10" r="8" mask="url(#moon-mask-mobile)"></circle>
+                        <mask id="moon-mask-mobile">
+                            <rect x="0" y="0" width="20" height="20" fill="white"></rect>
+                            <circle cx="11" cy="3" r="8" fill="black"></circle>
+                        </mask>
+                    </svg>
+                </label>
+            </div>
+
+            <button class="mobile-menu-toggle" [class.is-active]="isMobileMenuOpen" (click)="toggleMobileMenu()">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <div class="mobile-sidebar-backdrop" [class.is-active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+    <div class="mobile-sidebar" [class.is-active]="isMobileMenuOpen">
+        <div class="mobile-sidebar-header">
+            <div class="user-profile">
+                <div class="user-avatar">{{ username.charAt(0).toUpperCase() }}</div>
+                <div class="user-info">
+                    <div class="username">{{ username }}</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-sidebar-content">
+            <div class="mobile-menu-section">
+                <h3 class="mobile-menu-title">Navigation</h3>
+                <a routerLink="/processes" routerLinkActive="active" class="mobile-menu-item"
+                    (click)="closeMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="icon">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
+                    <span>Processes</span>
+                </a>
+            </div>
+            <div class="mobile-menu-section">
+                <h3 class="mobile-menu-title">Account</h3>
+                <a class="mobile-menu-item" (click)="onLogout()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="icon">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+                    </svg>
+                    <span>Logout</span>
+                </a>
             </div>
         </div>
     </div>

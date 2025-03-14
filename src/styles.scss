@@ -16,7 +16,7 @@ body {
     font-size: $font-size-base;
     line-height: 1.5;
     color: $gray-800;
-    background-color: $gray-100;
+    background-color: var(--surface-0);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
