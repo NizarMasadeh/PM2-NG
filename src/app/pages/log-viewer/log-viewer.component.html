@@ -69,7 +69,7 @@
         <p>There are no {{ logType === 'out' ? 'standard output' : 'error' }} logs for this process.</p>
     </div>
 
-    <div *ngIf="!loading && !error && logs.length > 0" class="logs-container">
+    <div *ngIf="!loading && !error && logs.length > 0" class="logs-container" #logsContainer>
         <pre class="logs"><code>{{ logs.join('\n') }}</code></pre>
     </div>
 </div>

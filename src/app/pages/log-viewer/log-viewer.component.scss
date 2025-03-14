@@ -274,6 +274,10 @@
     word-break: break-all;
 }
 
+.logs-container::-webkit-scrollbar {
+    display: none;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

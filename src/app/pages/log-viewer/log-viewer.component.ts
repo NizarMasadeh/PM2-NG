@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, interval, switchMap } from 'rxjs';
 import { Pm2Process } from '../../models/pm2-process.model';
@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './log-viewer.component.scss',
 })
 export class LogViewerComponent implements OnInit, OnDestroy {
+  @ViewChild('logsContainer') logsContainer?: ElementRef;
+
   process?: Pm2Process;
   logs: string[] = [];
   loading = true;
@@ -26,7 +28,7 @@ export class LogViewerComponent implements OnInit, OnDestroy {
     private pm2Service: Pm2Service,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.clearAutoRefresh();
@@ -46,6 +48,15 @@ export class LogViewerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.clearAutoRefresh();
     this.processId = '';
+  }
+
+  private scrollToBottom(): void {
+    if (this.logsContainer) {
+      setTimeout(() => {
+        const container = this.logsContainer?.nativeElement;
+        container.scrollTop = container.scrollHeight;
+      }, 100);
+    }
   }
 
   loadLogsWithRetry(retries: number): void {
@@ -98,28 +109,30 @@ export class LogViewerComponent implements OnInit, OnDestroy {
 
     this.clearAutoRefresh();
 
-    this.pm2Service.getLogs(this.processId, this.logType).subscribe({
-      next: (logs) => {
-        console.log('Load logs triggered');
+    this.pm2Service.getProcessById(this.processId).subscribe({
+      next: async (process) => {
+        this.process = await process;
+        this.pm2Service.getLogs(this.processId, this.logType).subscribe({
+          next: (logs) => {
+            console.log('Load logs triggered');
 
-        this.logs = logs;
-        this.loading = false;
+            this.logs = logs;
+            this.loading = false;
+            this.scrollToBottom();
 
-        this.pm2Service.getProcessById(this.processId).subscribe({
-          next: async (process) => {
-            this.process = await process;
           },
           error: (error) => {
-            console.error('Error loading process details:', error);
+            this.error = 'Failed to load logs. Please try again.';
+            this.loading = false;
+            console.error('Error loading logs:', error);
           },
         });
       },
       error: (error) => {
-        this.error = 'Failed to load logs. Please try again.';
-        this.loading = false;
-        console.error('Error loading logs:', error);
+        console.error('Error loading process details:', error);
       },
     });
+
   }
 
   toggleLogType(type: 'out' | 'error'): void {
