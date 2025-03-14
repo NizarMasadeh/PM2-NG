@@ -87,6 +87,7 @@
     font-weight: $font-weight-medium;
     transition: $transition-base;
     position: relative;
+    cursor: pointer;
 
     .icon {
         margin-right: $spacing-2;
