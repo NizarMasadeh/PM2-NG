@@ -35,8 +35,7 @@ export class AuthService {
     }
 
     logout(): void {
-        localStorage.removeItem(this.tokenKey)
-        localStorage.removeItem(this.userKey)
+        localStorage.clear();
     }
 
     isLoggedIn(): boolean {
