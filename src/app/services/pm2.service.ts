@@ -17,8 +17,6 @@ export class Pm2Service {
   }
 
   getProcessById(id: string): Observable<any> {
-    console.log('Triggered process in service');
-
     return this.http.get(`${this.apiUrl}/pm2/processes/${id}`);
   }
 

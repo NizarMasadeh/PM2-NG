@@ -91,8 +91,6 @@ export class LogViewerComponent implements OnInit, OnDestroy {
   }
 
   loadProcessDetails(): void {
-    console.log('Load proccess triggered');
-
     this.pm2Service.getProcessById(this.processId).subscribe({
       next: async (process) => {
         this.process = await process;
@@ -114,7 +112,6 @@ export class LogViewerComponent implements OnInit, OnDestroy {
         this.process = await process;
         this.pm2Service.getLogs(this.processId, this.logType).subscribe({
           next: (logs) => {
-            console.log('Load logs triggered');
 
             this.logs = logs;
             this.loading = false;
