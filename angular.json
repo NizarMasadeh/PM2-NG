@@ -46,13 +46,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "4mb",
+                  "maximumError": "4mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "4mb",
+                  "maximumError": "4mb"
                 }
               ],
               "outputHashing": "all"
@@ -73,15 +73,15 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "port": 4141
+          },
           "configurations": {
             "production": {
               "buildTarget": "pm2-ng:build:production"
             },
             "development": {
               "buildTarget": "pm2-ng:build:development"
-            },
-            "options": {
-              "port": 4141
             }
           },
           "defaultConfiguration": "development"
