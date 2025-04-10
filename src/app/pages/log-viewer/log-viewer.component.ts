@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, interval, switchMap } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import { Pm2Process } from '../../models/pm2-process.model';
 import { Pm2Service } from '../../services/pm2.service';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './log-viewer.component.scss',
 })
 export class LogViewerComponent implements OnInit, OnDestroy {
-  @ViewChild('logsContainer') logsContainer?: ElementRef;
+  @ViewChild('logsContainer') logsContainer!: ElementRef;
 
   process?: Pm2Process;
   logs: string[] = [];
@@ -23,6 +23,7 @@ export class LogViewerComponent implements OnInit, OnDestroy {
   refreshInterval = 500;
   logType: 'out' | 'error' = 'out';
   private refreshSubscription?: Subscription;
+  private shouldScrollToBottom = true;
 
   constructor(
     private pm2Service: Pm2Service,
@@ -38,10 +39,9 @@ export class LogViewerComponent implements OnInit, OnDestroy {
       this.logs = [];
       this.loading = true;
       this.error = '';
+      this.shouldScrollToBottom = true;
 
       this.loadLogs();
-      // this.loadLogsWithRetry(3);
-      // this.loadProcessDetails();
     });
   }
 
@@ -51,12 +51,38 @@ export class LogViewerComponent implements OnInit, OnDestroy {
   }
 
   private scrollToBottom(): void {
-    if (this.logsContainer) {
       setTimeout(() => {
-        const container = this.logsContainer?.nativeElement;
-        container.scrollTop = container.scrollHeight;
-      }, 100);
-    }
+        this.logsContainer.nativeElement.scrollTop = this.logsContainer.nativeElement.scrollHeight;
+
+      }, 0);
+  }
+
+  loadLogs(): void {
+    this.loading = true;
+    this.error = '';
+    this.clearAutoRefresh();
+
+    this.pm2Service.getProcessById(this.processId).subscribe({
+      next: async (process) => {
+        this.process = await process;
+        this.pm2Service.getLogs(this.processId, this.logType).subscribe({
+          next: (logs) => {
+            this.logs = logs;
+            this.loading = false;
+            this.scrollToBottom();
+            this.shouldScrollToBottom = false;
+          },
+          error: (error) => {
+            this.error = 'Failed to load logs. Please try again.';
+            this.loading = false;
+            console.error('Error loading logs:', error);
+          },
+        });
+      },
+      error: (error) => {
+        console.error('Error loading process details:', error);
+      },
+    });
   }
 
   loadLogsWithRetry(retries: number): void {
@@ -65,10 +91,9 @@ export class LogViewerComponent implements OnInit, OnDestroy {
 
     this.pm2Service.getLogs(this.processId, this.logType).subscribe({
       next: (logs) => {
-        console.log('Logs triggerd');
-
         this.logs = logs;
         this.loading = false;
+        this.scrollToBottom();
 
         if (this.autoRefresh) {
           setTimeout(() => this.setupAutoRefresh(), 1000);
@@ -90,54 +115,10 @@ export class LogViewerComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadProcessDetails(): void {
-    this.pm2Service.getProcessById(this.processId).subscribe({
-      next: async (process) => {
-        this.process = await process;
-      },
-      error: (error) => {
-        console.error('Error loading process details:', error);
-      },
-    });
-  }
-
-  loadLogs(): void {
-    this.loading = true;
-    this.error = '';
-
-    this.clearAutoRefresh();
-
-    this.pm2Service.getProcessById(this.processId).subscribe({
-      next: async (process) => {
-        this.process = await process;
-        this.pm2Service.getLogs(this.processId, this.logType).subscribe({
-          next: (logs) => {
-
-            this.logs = logs;
-            this.loading = false;
-            this.scrollToBottom();
-
-          },
-          error: (error) => {
-            this.error = 'Failed to load logs. Please try again.';
-            this.loading = false;
-            console.error('Error loading logs:', error);
-          },
-        });
-      },
-      error: (error) => {
-        console.error('Error loading process details:', error);
-      },
-    });
-
-  }
-
   toggleLogType(type: 'out' | 'error'): void {
     if (this.logType !== type) {
       this.logType = type;
-
       this.clearAutoRefresh();
-
       this.loadLogsWithRetry(3);
     }
   }
@@ -161,6 +142,9 @@ export class LogViewerComponent implements OnInit, OnDestroy {
           next: (logs) => {
             this.logs = logs;
             this.error = '';
+            if (this.isNearBottom()) {
+              this.scrollToBottom();
+            }
           },
           error: (error) => {
             console.error('Error during auto-refresh:', error);
@@ -168,6 +152,13 @@ export class LogViewerComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  private isNearBottom(): boolean {
+    if (!this.logsContainer) return true;
+    const container = this.logsContainer.nativeElement;
+    const threshold = 100; // pixels from bottom
+    return container.scrollTop + container.clientHeight >= container.scrollHeight - threshold;
   }
 
   clearAutoRefresh(): void {
@@ -181,6 +172,7 @@ export class LogViewerComponent implements OnInit, OnDestroy {
     this.pm2Service.clearLogs(this.processId).subscribe({
       next: () => {
         this.logs = [];
+        this.scrollToBottom();
       },
       error: (error) => {
         console.error('Error clearing logs:', error);

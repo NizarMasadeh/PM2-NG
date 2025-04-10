@@ -85,9 +85,9 @@ export class NavbarComponent implements OnInit {
         this.isDarkMode = true;
       }
     } else {
-      linkElement.href = 'theme-light.css';
+      linkElement.href = 'theme-dark.css';
       this.isDarkMode = false;
-      localStorage.setItem('theme', 'light');
+      localStorage.setItem('theme', 'dark');
     }
     this.isThemeLoading = false;
   }

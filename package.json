@@ -9,7 +9,7 @@
     "start:prod": "node dist/backend/main.js",
     "build:backend": "cd backend && nest build",
     "dev:server": "cd backend && nest start --watch",
-    "dev:client": "ng serve",
+    "dev:client": "ng serve --host 0.0.0.0",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "ng build && npm run build:backend",
     "postinstall": "npm run build"
