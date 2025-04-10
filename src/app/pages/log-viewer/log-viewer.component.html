@@ -31,7 +31,7 @@
                 <span>Refresh</span>
             </button>
 
-            <button class="action-button auto-refresh" (click)="toggleAutoRefresh()">
+            <button class="action-button auto-refresh" [class.active]="autoRefresh" (click)="toggleAutoRefresh()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                         stroke-width="2"
@@ -69,7 +69,13 @@
         <p>There are no {{ logType === 'out' ? 'standard output' : 'error' }} logs for this process.</p>
     </div>
 
-    <div *ngIf="!loading && !error && logs.length > 0" class="logs-container" #logsContainer>
-        <pre class="logs"><code>{{ logs.join('\n') }}</code></pre>
+    <div *ngIf="!loading && !error && logs.length > 0" class="terminal-container">
+        <div class="terminal-header">
+            <div class="terminal-title">
+                <span class="process-name">{{ process?.name }}</span>
+                <span class="log-type-badge">{{ logType === 'out' ? 'stdout' : 'stderr' }}</span>
+            </div>
+        </div>
+        <div class="terminal-content" [innerHTML]="processedLogs" #logsContainer></div>
     </div>
 </div>
