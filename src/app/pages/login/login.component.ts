@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-
+import { NotificationService } from 'nzrm-ng';
 @Component({
   selector: 'app-login',
   imports: [
@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private _notificationService: NotificationService
   ) {
     this.loginForm = this.fb.group({
       username: ["", [Validators.required]],
@@ -65,6 +66,7 @@ export class LoginComponent implements OnInit {
         if (success) {
           this.router.navigate(["/"])
         } else {
+          this._notificationService.error('Error', 'Wrong username or password!')
           this.error = "Invalid username or password"
         }
       },

@@ -329,17 +329,12 @@ $terminal-grid-line: rgba(255, 255, 255, 0.02);
 
     .log-line {
         white-space: pre-wrap;
-        word-break: break-all;
-        margin-bottom: 2px;
         position: relative;
         padding-left: 2px;
-        padding: 2px 4px;
-        border-bottom: 1px solid rgba($terminal-border, 0.5);
 
         &:hover {
             background-color: rgba($terminal-accent, 0.05);
             border-left: 2px solid $terminal-accent;
-            padding-left: 2px;
         }
     }
 
@@ -395,6 +390,7 @@ $terminal-grid-line: rgba(255, 255, 255, 0.02);
 }
 
 @keyframes shake {
+
     10%,
     90% {
         transform: translate3d(-1px, 0, 0);

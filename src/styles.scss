@@ -1,5 +1,7 @@
 @use 'variables' as *;
+@use "nzrm-ng/src/lib/styles/global-styles.scss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "primeicons/primeicons.css";
 
 *,
 *::before,
