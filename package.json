@@ -12,7 +12,7 @@
     "dev:client": "ng serve --host 0.0.0.0",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "ng build && npm run build:backend",
-    "postinstall": "npm run build"
+    "build:frontend:prod": "ng build --configuration=production --output-path=./dist"
   },
   "private": true,
   "dependencies": {
