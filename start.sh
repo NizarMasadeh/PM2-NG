@@ -13,7 +13,7 @@ FRONTEND_PATH="$(pwd)/dist/browser"
 BACKEND_PATH="$(pwd)/backend"
 
 echo -e "${YELLOW}=== Pulling from git ==="
-git swtich main
+git switch main
 git pull origin main
 
 echo -e "${YELLOW}Installing Dependencies..."
